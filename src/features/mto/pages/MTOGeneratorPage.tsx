@@ -65,7 +65,6 @@ export function MTOGeneratorPage() {
   const [department, setDepartment] = useState('Mechanical')
   const [contact, setContact] = useState('')
   const [remarks, setRemarks] = useState('')
-  const [savedMessage, setSavedMessage] = useState('')
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.mtoRows, JSON.stringify(rows))
@@ -76,7 +75,6 @@ export function MTOGeneratorPage() {
 
   const updateRow = (id: string, key: keyof MtoRow, value: string) => {
     setRows((current) => current.map((row) => row.id === id ? { ...row, [key]: value } : row))
-    setSavedMessage('')
   }
 
   const chooseMaterial = (id: string, description: string) => {
@@ -106,14 +104,12 @@ export function MTOGeneratorPage() {
     setDepartment('Mechanical')
     setContact('')
     setRemarks('')
-    setSavedMessage('')
   }
 
   const loadSample = () => {
     setRows(starterRows.map((row) => ({ ...row, id: crypto.randomUUID() })))
     setProject('Sample Project')
     setRequestedBy('Store / Site')
-    setSavedMessage('Sample MTO loaded.')
   }
 
   const downloadCsv = () => {
