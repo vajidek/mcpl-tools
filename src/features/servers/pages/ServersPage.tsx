@@ -6,6 +6,7 @@ import { Card } from '../../../components/ui/Card'
 import { ROUTE_PATHS } from '../../../app/config/constants'
 import { serverStore, useServerStore } from '../../../store/serverStore'
 import { useAppStore } from '../../../store/appStore'
+import { isMCPServerConnected } from '../../../mcp/types/mcp.types'
 
 export function ServersPage() {
   const { servers, isLoading, error } = useServerStore()
@@ -50,7 +51,9 @@ export function ServersPage() {
         <label className="field-group"><span className="sr-only">Filter by status</span>
           <select className="text-input" value={statusFilter} onChange={(event) => setStatusFilter(event.target.value)}>
             <option value="all">All statuses</option>
+            <option value="ready">Ready</option>
             <option value="connected">Connected</option>
+            <option value="initializing">Initializing</option>
             <option value="disconnected">Disconnected</option>
             <option value="connecting">Connecting</option>
             <option value="error">Error</option>
@@ -69,7 +72,7 @@ export function ServersPage() {
                 <p className="eyebrow">{server.transport}</p>
                 <h3>{server.name}</h3>
               </div>
-              <Badge tone={server.connectionStatus === 'connected' ? 'success' : server.connectionStatus === 'error' ? 'error' : 'warning'}>
+              <Badge tone={isMCPServerConnected(server.connectionStatus) ? 'success' : server.connectionStatus === 'error' ? 'error' : 'warning'}>
                 {server.connectionStatus}
               </Badge>
             </div>
