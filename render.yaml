@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: mcpl-tools-api
+    runtime: docker
+    plan: free
+    healthCheckPath: /health
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: HOST
+        value: 0.0.0.0
+      - key: CORS_ORIGINS
+        value: https://vajidek.github.io
+      - key: MCP_BUILTIN_TOOLS
+        value: "true"
+      - key: MCP_SERVERS_JSON
+        value: "[]"
+      - key: MCP_ALLOWED_COMMANDS
+        value: ""
+      - key: MCP_ALLOWED_HOSTS
+        value: ""
+      - key: API_ACCESS_TOKEN
+        sync: false
