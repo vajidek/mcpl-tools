@@ -21,7 +21,7 @@ const detailBySection: Record<string, { title: string; description: string; valu
     values: [
       { label: 'Default server', value: 'Local Workspace Server' },
       { label: 'Auto-refresh', value: 'Enabled' },
-      { label: 'Execution timeout', value: '30s' },
+      { label: 'Execution timeout', value: 'Configured per MCP server' },
     ],
   },
   [ROUTE_PATHS.settingsSecurity]: {
@@ -137,11 +137,11 @@ export function SettingsPage() {
           </div> : null}
 
           {activeSection === ROUTE_PATHS.settingsGeneral ? <div className="field-list">
-            <label className="setting-row"><span><strong>Auto-refresh data</strong><small>Allow screens to refresh demo catalogs on entry.</small></span><input type="checkbox" checked={preferences.autoRefresh} onChange={(event) => updatePreferences({ autoRefresh: event.target.checked })} /></label>
+            <label className="setting-row"><span><strong>Auto-refresh data</strong><small>Refresh catalogs when screens are opened.</small></span><input type="checkbox" checked={preferences.autoRefresh} onChange={(event) => updatePreferences({ autoRefresh: event.target.checked })} /></label>
             <div className="setting-row"><span><strong>Runtime mode</strong><small>{mcpServiceProvider.mode === 'demo' ? 'Data comes from local fixtures and simulated operations.' : 'Catalog and operation requests are routed through the backend API.'}</small></span><span className={`badge ${mcpServiceProvider.mode === 'demo' ? 'badge-warning' : 'badge-info'}`}>{mcpServiceProvider.mode === 'demo' ? 'Demo' : 'API'}</span></div>
           </div> : null}
 
-          {activeSection === ROUTE_PATHS.settingsSecurity ? <div className="result-banner result-banner-success">This browser-only demo does not store credentials or connect to real MCP servers.</div> : null}
+          {activeSection === ROUTE_PATHS.settingsSecurity ? <div className="result-banner result-banner-success">{mcpServiceProvider.mode === 'demo' ? 'Demo mode keeps MCP operations local and does not store external credentials.' : 'API mode keeps MCP credentials and transport configuration on the backend; the browser does not receive server secrets.'}</div> : null}
 
           <div className="settings-list">
             {sectionValues.map((value) => (
@@ -156,7 +156,7 @@ export function SettingsPage() {
           {activeSection === ROUTE_PATHS.settingsGeneral ? <div className="inline-actions settings-actions">
             <Button type="button" variant="secondary" onClick={() => void clearHistory()}>Clear execution history</Button>
             <Button type="button" variant="secondary" onClick={() => void clearLogs()}>Clear logs</Button>
-            <Button type="button" onClick={() => void resetApplication()}>Reset local app state</Button>
+            {mcpServiceProvider.mode === 'demo' ? <Button type="button" onClick={() => void resetApplication()}>Reset local app state</Button> : null}
           </div> : null}
         </Card>
       </section>
