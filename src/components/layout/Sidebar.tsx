@@ -3,13 +3,10 @@ import { ROUTE_PATHS } from '../../app/config/constants'
 
 const items = [
   { label: 'Dashboard', path: ROUTE_PATHS.dashboard },
-  { label: 'Servers', path: ROUTE_PATHS.servers },
   { label: 'Tools', path: ROUTE_PATHS.tools },
+  { label: 'Servers', path: ROUTE_PATHS.servers },
   { label: 'Resources', path: ROUTE_PATHS.resources },
-  { label: 'Prompts', path: ROUTE_PATHS.prompts },
   { label: 'Executions', path: ROUTE_PATHS.executions },
-  { label: 'Logs', path: ROUTE_PATHS.logs },
-  { label: 'Integrations', path: ROUTE_PATHS.integrations },
   { label: 'Settings', path: ROUTE_PATHS.settings },
 ]
 
@@ -19,7 +16,7 @@ export function Sidebar() {
       <div className="brand-block">
         <div className="brand-mark">M</div>
         <div>
-          <p className="eyebrow">Workspace</p>
+          <p className="eyebrow">Utility workspace</p>
           <h1>MCPL Tools</h1>
         </div>
       </div>
