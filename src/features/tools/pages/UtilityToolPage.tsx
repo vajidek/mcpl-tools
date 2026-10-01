@@ -1,6 +1,5 @@
 import { useMemo, useState, type ReactNode } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { Button } from '../../../components/ui/Button'
 import { Card } from '../../../components/ui/Card'
 import { ROUTE_PATHS } from '../../../app/config/constants'
 
