@@ -19,8 +19,14 @@ export const createBackendServer = (providedEnvironment?: BackendEnvironment): S
     environment: environment.environment,
     envValues: process.env,
   })
-  const servers: MCPServer[] = configured.map(({ command: _command, args: _args, env: _env, connectionTimeoutMs: _connectionTimeoutMs, requestTimeoutMs: _requestTimeoutMs, ...server }) => ({
-    ...server,
+  const servers: MCPServer[] = configured.map((config) => ({
+    id: config.id,
+    name: config.name,
+    description: config.description,
+    transport: config.transport,
+    capabilities: [...config.capabilities],
+    enabled: config.enabled,
+    ...(config.baseUrl ? { baseUrl: config.baseUrl } : {}),
     connectionStatus: 'disconnected',
   }))
   const repositories = new InMemoryRuntimeRepositories(servers)
