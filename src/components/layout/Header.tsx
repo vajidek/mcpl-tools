@@ -28,7 +28,7 @@ export function Header() {
   return (
     <header className="topbar">
       <div>
-        <p className="eyebrow">Developer portal</p>
+        <p className="eyebrow">MCP operations workspace</p>
         <h2>MCPL Tools</h2>
       </div>
       <div className="inline-actions">
