@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Button } from '../../../components/ui/Button'
 import { Badge } from '../../../components/ui/Badge'
 import { Card } from '../../../components/ui/Card'
@@ -12,24 +12,21 @@ export function LogsPage() {
   const [level, setLevel] = useState<'ALL' | LogLevel>('ALL')
   const [search, setSearch] = useState('')
   const [source, setSource] = useState('all')
-  const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
 
-  const loadLogs = async () => {
-    setIsLoading(true)
-    setError('')
+  const loadLogs = useCallback(async () => {
     try {
-      setLogs(await mcpServiceProvider.listLogs(level, search, source))
+      const nextLogs = await mcpServiceProvider.listLogs(level, search, source)
+      setLogs(nextLogs)
+      setError('')
     } catch (loadError) {
       setError(loadError instanceof Error ? loadError.message : 'Unable to load logs.')
-    } finally {
-      setIsLoading(false)
     }
-  }
+  }, [level, search, source])
 
   useEffect(() => {
     void loadLogs()
-  }, [level, search, source])
+  }, [loadLogs])
 
   const sources = useMemo(
     () => ['all', ...new Set(logs.map((entry) => entry.module ?? (mcpServiceProvider.mode === 'demo' ? 'demo seed' : 'backend')))],
@@ -58,8 +55,8 @@ export function LogsPage() {
           <h2>Operations log</h2>
         </div>
         <div className="inline-actions">
-          <Button type="button" variant="secondary" onClick={() => void loadLogs()} disabled={isLoading}>
-            {isLoading ? 'Refreshing…' : 'Refresh'}
+          <Button type="button" variant="secondary" onClick={() => void loadLogs()}>
+            Refresh
           </Button>
           <Button type="button" variant="secondary" onClick={() => void clearLogs()} disabled={logs.length === 0}>
             Clear logs
@@ -86,7 +83,7 @@ export function LogsPage() {
           <h3>{logs.length} log entries</h3>
           <span className="tool-description">{mcpServiceProvider.mode === 'demo' ? 'Local demo log stream' : 'Backend log stream'}</span>
         </div>
-        {isLoading && logs.length === 0 ? <p role="status">Loading logs…</p> : logs.length === 0 ? (
+        {logs.length === 0 ? (
           <div className="empty-state compact">
             <h2>No log entries</h2>
             <p>No events match the current filters.</p>
