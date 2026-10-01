@@ -111,3 +111,6 @@ export type MCPTransport = {
   disconnect: () => Promise<void>
   isConnected: () => boolean
 }
+
+export const isMCPServerConnected = (status: MCPServerStatus): boolean =>
+  status === 'connected' || status === 'ready'
