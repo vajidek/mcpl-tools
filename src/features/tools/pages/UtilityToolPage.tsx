@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useState, type ReactNode } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { Button } from '../../../components/ui/Button'
 import { Card } from '../../../components/ui/Card'
@@ -90,7 +90,7 @@ function UnitConverterTool() {
 
 type Field = [string, string, (value: string) => void]
 
-function Calculator({ title, description, fields, result }: { title: string; description: string; fields: Field[]; result: React.ReactNode }) {
+function Calculator({ title, description, fields, result }: { title: string; description: string; fields: Field[]; result: ReactNode }) {
   return (
     <div className="calculator-card">
       <p className="eyebrow">Calculator</p>
