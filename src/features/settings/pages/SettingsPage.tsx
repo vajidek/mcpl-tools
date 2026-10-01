@@ -80,7 +80,7 @@ export function SettingsPage() {
     }
   }
 
-  const useDemoProvider = async () => {
+  const switchToDemoMode = async () => {
     setFeedback('')
     setError('')
     try {
@@ -134,7 +134,7 @@ export function SettingsPage() {
             <label className="field-group"><span>Backend API URL</span><input className="text-input" type="url" value={apiBaseUrl} onChange={(event) => setApiBaseUrl(event.target.value)} placeholder="https://mcpl-tools-api.onrender.com" /></label>
             <label className="field-group"><span>API access token</span><input className="text-input" type="password" value={apiToken} onChange={(event) => setApiToken(event.target.value)} placeholder="Paste your backend token" autoComplete="off" /></label>
             <div className="result-banner">The token is stored in session storage and sent only as a Bearer token. Never commit it to GitHub or put it in frontend source code.</div>
-            <div className="inline-actions settings-actions"><Button type="button" onClick={() => void saveConnection()}>Save and verify API</Button><Button type="button" variant="secondary" onClick={() => void useDemoProvider()}>Use demo mode</Button></div>
+            <div className="inline-actions settings-actions"><Button type="button" onClick={() => void saveConnection()}>Save and verify API</Button><Button type="button" variant="secondary" onClick={() => void switchToDemoMode()}>Use demo mode</Button></div>
           </div> : null}
 
           {activeSection === ROUTE_PATHS.settingsAppearance ? <div className="field-list">
