@@ -15,6 +15,8 @@ import { SettingsPage } from '../features/settings/pages/SettingsPage'
 import { ToolDetailPage } from '../features/tools/pages/ToolDetailPage'
 import { ToolExecutionPage } from '../features/tools/pages/ToolExecutionPage'
 import { ToolsPage } from '../features/tools/pages/ToolsPage'
+import { UtilityToolPage } from '../features/tools/pages/UtilityToolPage'
+import { MTOGeneratorPage } from '../features/mto/pages/MTOGeneratorPage'
 import { NotFound } from '../pages/NotFound'
 import { ROUTE_PATHS } from '../app/config/constants'
 
@@ -26,6 +28,8 @@ export function AppRouter() {
       <Route path={ROUTE_PATHS.servers} element={<ServersPage />} />
       <Route path={ROUTE_PATHS.serverDetail} element={<ServerDetailPage />} />
       <Route path={ROUTE_PATHS.tools} element={<ToolsPage />} />
+      <Route path={ROUTE_PATHS.mtoGenerator} element={<MTOGeneratorPage />} />
+      <Route path={ROUTE_PATHS.utilityTool} element={<UtilityToolPage />} />
       <Route path={ROUTE_PATHS.toolDetail} element={<ToolDetailPage />} />
       <Route path={ROUTE_PATHS.toolExecute} element={<ToolExecutionPage />} />
       <Route path={ROUTE_PATHS.executionConsole} element={<ExecutionConsolePage />} />
