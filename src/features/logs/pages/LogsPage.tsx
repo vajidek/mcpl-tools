@@ -3,7 +3,7 @@ import { Button } from '../../../components/ui/Button'
 import { Badge } from '../../../components/ui/Badge'
 import { Card } from '../../../components/ui/Card'
 import { mcpServiceProvider } from '../../../services/mcp/MCPServiceProvider'
-import type { LogEntry, LogLevel } from '../../../services/logging/logTypes'
+import type { LogLevel } from '../../../services/logging/logTypes'
 import { useAsync } from '../../../hooks/useAsync'
 
 const levels: Array<'ALL' | LogLevel> = ['ALL', 'DEBUG', 'INFO', 'WARN', 'ERROR']
