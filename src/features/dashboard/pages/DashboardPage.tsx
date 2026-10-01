@@ -5,6 +5,7 @@ import { Card } from '../../../components/ui/Card'
 import { ROUTE_PATHS } from '../../../app/config/constants'
 import { mcpServiceProvider } from '../../../services/mcp/MCPServiceProvider'
 import type { LogEntry } from '../../../services/logging/logTypes'
+import { isMCPServerConnected } from '../../../mcp/types/mcp.types'
 import { executionStore, useExecutionStore } from '../../../store/executionStore'
 import { serverStore, useServerStore } from '../../../store/serverStore'
 import { toolStore, useToolStore } from '../../../store/toolStore'
@@ -45,7 +46,7 @@ export function DashboardPage() {
 
   const metrics = [
     { label: 'Total servers', value: String(servers.length) },
-    { label: 'Connected servers', value: String(servers.filter((server) => server.connectionStatus === 'connected').length) },
+    { label: 'Connected servers', value: String(servers.filter((server) => isMCPServerConnected(server.connectionStatus)).length) },
     { label: 'Available tools', value: String(tools.filter((tool) => tool.available).length) },
     { label: 'Available resources', value: String(resourceCount) },
     { label: 'Available prompts', value: String(promptCount) },
@@ -88,7 +89,7 @@ export function DashboardPage() {
                   <strong>{server.name}</strong>
                   <small>{server.transport}</small>
                 </div>
-                <Badge tone={server.connectionStatus === 'connected' ? 'success' : server.connectionStatus === 'error' ? 'error' : 'warning'}>
+                <Badge tone={isMCPServerConnected(server.connectionStatus) ? 'success' : server.connectionStatus === 'error' ? 'error' : 'warning'}>
                   {server.connectionStatus}
                 </Badge>
               </li>

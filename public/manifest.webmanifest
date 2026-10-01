@@ -1,0 +1,18 @@
+{
+  "name": "MCPL Tools",
+  "short_name": "MCPL Tools",
+  "description": "MCP server, tool, resource, prompt, execution, and operations workspace.",
+  "start_url": "./#/dashboard",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#020817",
+  "theme_color": "#020817",
+  "icons": [
+    {
+      "src": "./favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

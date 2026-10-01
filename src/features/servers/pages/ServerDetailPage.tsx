@@ -6,7 +6,7 @@ import { Badge } from '../../../components/ui/Badge'
 import { ROUTE_PATHS } from '../../../app/config/constants'
 import { serverStore, useServerStore } from '../../../store/serverStore'
 import { mcpServiceProvider } from '../../../services/mcp/MCPServiceProvider'
-import type { MCPTool } from '../../../mcp/types/mcp.types'
+import { isMCPServerConnected, type MCPTool } from '../../../mcp/types/mcp.types'
 
 export function ServerDetailPage() {
   const { serverId = '' } = useParams()
@@ -61,7 +61,7 @@ export function ServerDetailPage() {
     setActionError('')
     setConnectionMessage('')
     try {
-      const updated = server.connectionStatus === 'connected'
+      const updated = isMCPServerConnected(server.connectionStatus)
         ? await serverStore.disconnect(server.id)
         : await serverStore.connect(server.id)
       setConnectionMessage(mcpServiceProvider.mode === 'demo'
@@ -80,8 +80,8 @@ export function ServerDetailPage() {
           <h2>{server.name}</h2>
         </div>
         <div className="inline-actions">
-          <Button type="button" onClick={() => void handleConnectionChange()} disabled={server.connectionStatus === 'connecting'}>
-            {server.connectionStatus === 'connected' ? 'Disconnect' : server.connectionStatus === 'connecting' ? 'Connecting…' : 'Connect'}
+          <Button type="button" onClick={() => void handleConnectionChange()} disabled={server.connectionStatus === 'connecting' || server.connectionStatus === 'initializing'}>
+            {isMCPServerConnected(server.connectionStatus) ? 'Disconnect' : server.connectionStatus === 'connecting' || server.connectionStatus === 'initializing' ? 'Connecting…' : 'Connect'}
           </Button>
           <Button type="button" variant="secondary" onClick={handleTestConnection} disabled={isTesting}>
             {isTesting ? 'Testing…' : 'Test connection'}
@@ -97,7 +97,7 @@ export function ServerDetailPage() {
         <Card className="panel">
           <div className="section-header">
             <h3>Overview</h3>
-            <Badge tone={server.connectionStatus === 'connected' ? 'success' : server.connectionStatus === 'error' ? 'error' : 'warning'}>
+            <Badge tone={isMCPServerConnected(server.connectionStatus) ? 'success' : server.connectionStatus === 'error' ? 'error' : 'warning'}>
               {server.connectionStatus}
             </Badge>
           </div>
