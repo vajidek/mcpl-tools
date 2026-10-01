@@ -48,3 +48,12 @@ npm run backend:test-mcp
 ## Architecture and security
 
 See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md), [docs/MCP.md](docs/MCP.md), [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md), and [docs/SECURITY.md](docs/SECURITY.md). Backend runtime history/log repositories are in-memory only. No database or credential storage is configured.
+
+
+## Production website
+
+The application is built as a static web app and uses hash routing so it can be hosted safely on GitHub Pages or another static host. The repository includes CI verification and a GitHub Pages deployment workflow.
+
+For GitHub Pages, enable **Settings → Pages → GitHub Actions** once in the repository. After the default branch receives the deployment workflow, pushes to `main` publish the production build.
+
+The default frontend provider is demo mode. Real MCP connectivity is enabled by setting `VITE_MCP_PROVIDER=api` and configuring the backend environment separately; server credentials remain backend-side.
