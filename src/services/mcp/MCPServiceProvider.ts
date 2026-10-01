@@ -5,6 +5,7 @@ import type { ApiResponse } from '../../types/api'
 import type { LogEntry } from '../logging/logTypes'
 import type { MCPServiceProvider } from './MCPServiceProvider.types'
 import { mockMcpService } from './mockMcpService'
+import { getRuntimeConnectionSettings } from './runtimeConfig'
 
 const encode = (value: string) => encodeURIComponent(value)
 
@@ -61,13 +62,13 @@ const apiProvider: MCPServiceProvider = {
   initialResources: [],
   health: async () => {
     try {
-      const health = await readApi<{ status: 'ok'; mcp: { transportConfigured: boolean; supportedTransports: string[] } }>('/health')
+      const health = await readApi<{ status: 'ok'; mcp: { configuredServers: number; readyServers: number; transportConfigured: boolean; supportedTransports: string[] } }>('/health')
       const transports = health.mcp.supportedTransports.join(', ')
       return {
         status: health.status,
         mode: 'api',
         transportConfigured: health.mcp.transportConfigured,
-        message: health.mcp.transportConfigured ? `Backend API reachable; supported MCP transports: ${transports}.` : 'Backend API reachable; MCP transports are not configured.',
+        message: health.mcp.transportConfigured ? `Backend API reachable; ${health.mcp.readyServers}/${health.mcp.configuredServers} MCP servers ready; transports: ${transports}.` : 'Backend API reachable; MCP transports are not configured.',
       }
     } catch (error) {
       return { status: 'unavailable', mode: 'api', transportConfigured: false, message: error instanceof Error ? error.message : 'Backend API unavailable.' }
