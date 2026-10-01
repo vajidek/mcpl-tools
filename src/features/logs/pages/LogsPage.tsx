@@ -15,9 +15,9 @@ export function LogsPage() {
   const [source, setSource] = useState('all')
   const [actionError, setActionError] = useState('')
 
-  const loadLogs = useCallback(() => mcpServiceProvider.listLogs(level, search, source), [level, search, source, refreshKey])
+  const loadLogs = useCallback(() => { void refreshKey; return mcpServiceProvider.listLogs(level, search, source) }, [level, search, source, refreshKey])
   const { data: loadedLogs, loading, error: asyncError } = useAsync(loadLogs)
-  const logs: LogEntry[] = loadedLogs ?? []
+  const logs = useMemo(() => loadedLogs ?? [], [loadedLogs])
   const error = asyncError?.message ?? actionError
 
   const refreshLogs = () => {
