@@ -236,7 +236,7 @@ export function MTOGeneratorPage() {
                         aria-label={`Item ${index + 1} description`}
                       />
                       <datalist id={`mto-materials-${row.id}`}>
-                        {matching.map(([name, category]) => <option key={name} value={name}>{category}</option>)}
+                        {matching.map((material) => <option key={material.name} value={material.name}>{material.category}</option>)}
                       </datalist>
                     </td>
                     <td>
