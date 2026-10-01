@@ -146,6 +146,7 @@ export function MTOGeneratorPage() {
 
       <Card className="panel">
         <div className="mto-reference-header">
+          <img className="mto-brand-logo" src={`${import.meta.env.BASE_URL}midland-logo.svg`} alt="Midland Contracting Private Limited" />
           <div>
             <p className="eyebrow">MTO</p>
             <h1>{title}</h1>
