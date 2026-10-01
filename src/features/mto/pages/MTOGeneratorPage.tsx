@@ -16,18 +16,25 @@ type MtoRow = {
 
 const units = ['Nos', 'm', 'kg', 'ton', 'set', 'LS', 'm²', 'm³', 'Ltr', 'MT', 'Pair', 'Box']
 
-const materials = [
-  ['Pipe', 'Piping', ['m', 'Nos'], ['DN 100', 'DN 150', 'DN 300', 'DN 600', 'DN 1200']],
-  ['Sluice Valve', 'Valves', ['Nos'], ['DN 100', 'DN 150', 'DN 300', 'DN 600', 'DN 1200']],
-  ['Butterfly Valve', 'Valves', ['Nos'], ['DN 100', 'DN 150', 'DN 300', 'DN 600']],
-  ['Dismantling Joint', 'Piping', ['Nos'], ['DN 100', 'DN 150', 'DN 300', 'DN 600']],
-  ['Gasket', 'Piping', ['Nos', 'set'], ['DN 100', 'DN 150', 'DN 300', 'DN 600']],
-  ['Hex Bolt', 'Fasteners', ['Nos'], ['M16 x 75 mm', 'M20 x 100 mm', 'M24 x 120 mm']],
-  ['Nut', 'Fasteners', ['Nos'], ['M16', 'M20', 'M24']],
-  ['Washer', 'Fasteners', ['Nos'], ['M16', 'M20', 'M24']],
-  ['Pump', 'Mechanical', ['Nos', 'set'], ['As per approved specification']],
-  ['Cable', 'Electrical', ['m'], ['1.5 sq mm', '2.5 sq mm', '4 sq mm', '6 sq mm']],
-  ['Cable Tray', 'Electrical', ['m'], ['100 mm', '150 mm', '300 mm', '600 mm']],
+type MaterialReference = {
+  name: string
+  category: string
+  units: string[]
+  specs: string[]
+}
+
+const materials: MaterialReference[] = [
+  { name: 'Pipe', category: 'Piping', units: ['m', 'Nos'], specs: ['DN 100', 'DN 150', 'DN 300', 'DN 600', 'DN 1200'] },
+  { name: 'Sluice Valve', category: 'Valves', units: ['Nos'], specs: ['DN 100', 'DN 150', 'DN 300', 'DN 600', 'DN 1200'] },
+  { name: 'Butterfly Valve', category: 'Valves', units: ['Nos'], specs: ['DN 100', 'DN 150', 'DN 300', 'DN 600'] },
+  { name: 'Dismantling Joint', category: 'Piping', units: ['Nos'], specs: ['DN 100', 'DN 150', 'DN 300', 'DN 600'] },
+  { name: 'Gasket', category: 'Piping', units: ['Nos', 'set'], specs: ['DN 100', 'DN 150', 'DN 300', 'DN 600'] },
+  { name: 'Hex Bolt', category: 'Fasteners', units: ['Nos'], specs: ['M16 x 75 mm', 'M20 x 100 mm', 'M24 x 120 mm'] },
+  { name: 'Nut', category: 'Fasteners', units: ['Nos'], specs: ['M16', 'M20', 'M24'] },
+  { name: 'Washer', category: 'Fasteners', units: ['Nos'], specs: ['M16', 'M20', 'M24'] },
+  { name: 'Pump', category: 'Mechanical', units: ['Nos', 'set'], specs: ['As per approved specification'] },
+  { name: 'Cable', category: 'Electrical', units: ['m'], specs: ['1.5 sq mm', '2.5 sq mm', '4 sq mm', '6 sq mm'] },
+  { name: 'Cable Tray', category: 'Electrical', units: ['m'], specs: ['100 mm', '150 mm', '300 mm', '600 mm'] },
 ]
 
 const emptyRow = (): MtoRow => ({
@@ -78,9 +85,9 @@ export function MTOGeneratorPage() {
   }
 
   const chooseMaterial = (id: string, description: string) => {
-    const item = materials.find(([name]) => name.toLowerCase() === description.toLowerCase())
+    const item = materials.find((material) => material.name.toLowerCase() === description.toLowerCase())
     setRows((current) => current.map((row) => row.id === id
-      ? { ...row, description: item?.[0] ?? description, unit: item?.[2]?.[0] ?? row.unit, specification: item?.[3]?.[0] ?? row.specification }
+      ? { ...row, description: item?.name ?? description, unit: item?.units[0] ?? row.unit, specification: item?.specs[0] ?? row.specification }
       : row))
   }
 
@@ -209,12 +216,12 @@ export function MTOGeneratorPage() {
             </thead>
             <tbody>
               {rows.map((row, index) => {
-                const suggestion = materials.find(([name]) => name.toLowerCase() === row.description.toLowerCase())
+                const suggestion = materials.find((material) => material.name.toLowerCase() === row.description.toLowerCase())
                 const matching = row.description.trim()
-                  ? materials.filter(([name]) => name.toLowerCase().includes(row.description.trim().toLowerCase())).slice(0, 5)
+                  ? materials.filter((material) => material.name.toLowerCase().includes(row.description.trim().toLowerCase())).slice(0, 5)
                   : materials.slice(0, 5)
-                const specs = suggestion?.[3] ?? []
-                const suggestedUnits = suggestion?.[2] ?? units
+                const specs = suggestion?.specs ?? []
+                const suggestedUnits = suggestion?.units ?? units
                 return (
                   <tr key={row.id}>
                     <td>{index + 1}</td>
