@@ -23,30 +23,25 @@ export function AppRouter() {
     <Routes>
       <Route path="/" element={<Navigate to={ROUTE_PATHS.dashboard} replace />} />
       <Route path={ROUTE_PATHS.dashboard} element={<DashboardPage />} />
-
       <Route path={ROUTE_PATHS.servers} element={<ServersPage />} />
       <Route path={ROUTE_PATHS.serverDetail} element={<ServerDetailPage />} />
-
       <Route path={ROUTE_PATHS.tools} element={<ToolsPage />} />
       <Route path={ROUTE_PATHS.toolDetail} element={<ToolDetailPage />} />
       <Route path={ROUTE_PATHS.toolExecute} element={<ToolExecutionPage />} />
       <Route path={ROUTE_PATHS.executionConsole} element={<ExecutionConsolePage />} />
-
       <Route path={ROUTE_PATHS.resources} element={<ResourcesPage />} />
       <Route path={ROUTE_PATHS.resourceDetail} element={<ResourceDetailPage />} />
-
       <Route path={ROUTE_PATHS.prompts} element={<PromptsPage />} />
       <Route path={ROUTE_PATHS.promptDetail} element={<PromptDetailPage />} />
-
       <Route path={ROUTE_PATHS.executions} element={<ExecutionsPage />} />
       <Route path={ROUTE_PATHS.executionDetail} element={<ExecutionDetailPage />} />
       <Route path={ROUTE_PATHS.logs} element={<LogsPage />} />
       <Route path={ROUTE_PATHS.integrations} element={<IntegrationsPage />} />
       <Route path={ROUTE_PATHS.settings} element={<SettingsPage />} />
       <Route path={ROUTE_PATHS.settingsGeneral} element={<SettingsPage />} />
+      <Route path={ROUTE_PATHS.settingsConnection} element={<SettingsPage />} />
       <Route path={ROUTE_PATHS.settingsSecurity} element={<SettingsPage />} />
       <Route path={ROUTE_PATHS.settingsAppearance} element={<SettingsPage />} />
-
       <Route path="*" element={<NotFound />} />
     </Routes>
   )
