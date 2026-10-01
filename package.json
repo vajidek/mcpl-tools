@@ -1,0 +1,41 @@
+{
+  "name": "mcpl-tools",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "backend:build": "tsc -p backend/tsconfig.json",
+    "backend:check": "tsc -p backend/tsconfig.json --noEmit",
+    "backend:start": "node --env-file-if-exists=backend/.env backend/dist/backend/src/server.js",
+    "backend:dev": "npm run backend:build && node --watch --env-file-if-exists=backend/.env backend/dist/backend/src/server.js",
+    "backend:test-mcp-http": "node backend/dist/backend/dev/mcpTestServer.js --http",
+    "backend:gateway-smoke": "node backend/dist/backend/dev/verifyMcpGateway.js",
+    "backend:test-mcp": "npm run backend:build && node backend/dist/backend/dev/runGatewaySmoke.js",
+    "build": "tsc -b && vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.31.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "react-router-dom": "^7.18.4",
+    "undici": "^7.30.0",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^24.13.3",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.7",
+    "@vitejs/plugin-react": "^6.1.1",
+    "eslint": "^10.10.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.6",
+    "globals": "^17.12.0",
+    "typescript": "~6.0.2",
+    "typescript-eslint": "^8.69.0",
+    "vite": "^8.3.0"
+  }
+}
