@@ -6,13 +6,13 @@
 }
 
 .sidebar {
-  width: 280px;
+  width: 230px;
   background: linear-gradient(180deg, #0f172a 0%, #111827 100%);
   border-right: 1px solid rgba(148, 163, 184, 0.2);
-  padding: 24px 18px;
+  padding: 20px 14px;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 18px;
 }
 
 .brand-block {
@@ -51,7 +51,7 @@
 .nav-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 6px;
 }
 
 .nav-item {
@@ -102,14 +102,14 @@
 
 .content-panel {
   flex: 1;
-  padding: 32px;
+  padding: 24px;
   background: linear-gradient(180deg, rgba(15, 23, 42, 0.96) 0%, rgba(2, 8, 23, 1) 100%);
 }
 
 .page-stack {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 18px;
 }
 
 .page-header {
@@ -139,7 +139,7 @@
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 18px;
+  gap: 14px;
 }
 
 .stat-card,
@@ -154,7 +154,7 @@
 }
 
 .stat-card {
-  padding: 18px 18px 16px;
+  padding: 16px;
 }
 
 .status-dot {
@@ -200,7 +200,7 @@
 }
 
 .panel {
-  padding: 20px;
+  padding: 18px;
 }
 
 .panel-header {

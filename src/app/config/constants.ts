@@ -25,5 +25,5 @@ export const ROUTE_PATHS = {
 export const STORAGE_KEYS = {
   theme: 'mcpl-tools.theme',
   appSettings: 'mcpl-tools.settings',
-  recentExecutions: 'mcpl-tools.recent-executions',
+  recentExecutions: 'mcpl-tools.recent-executions.v2',
 } as const

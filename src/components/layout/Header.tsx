@@ -32,7 +32,7 @@ export function Header() {
 
   return (
     <header className="topbar">
-      <div><p className="eyebrow">MCP operations workspace</p><h2>MCPL Tools</h2></div>
+      <div><p className="eyebrow">MCP utility workspace</p><h2>MCPL Tools</h2></div>
       <div className="inline-actions">
         {health ? <span className={'badge ' + (health.status === 'ok' ? 'badge-success' : 'badge-error')} title={health.message}>
           {health.mode === 'demo' ? 'Demo provider' : health.status === 'ok' ? 'API reachable' : 'API unavailable'}

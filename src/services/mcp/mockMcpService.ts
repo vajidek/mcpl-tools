@@ -1,5 +1,5 @@
 import { mockExecutions, mockLogs } from '../../mocks/execution'
-import { mockPrompts, mockResources, mockServers, mockTools } from '../../mocks/servers'
+import { executeMockCoreTool, mockPrompts, mockResources, mockServers, mockTools } from '../../mocks/servers'
 import { isMCPServerConnected } from '../../mcp/types/mcp.types'
 import type {
   MCPExecutionRequest,
@@ -216,32 +216,40 @@ export const mockMcpService = {
       return failed(`Missing required field(s): ${missing.join(', ')}`)
     }
 
-    await new Promise((resolve) => setTimeout(resolve, 550))
+    await new Promise((resolve) => setTimeout(resolve, 180))
 
-    return saveExecution({
-      id: request.id,
-      requestId: request.id,
-      kind: 'tool',
-      toolId: tool.id,
-      serverId: tool.serverId,
-      toolName: tool.name,
-      input: request.input,
-      request,
-      status: 'success',
-      output: {
-        tool: tool.name,
-        serverId: request.serverId,
+    try {
+      const output = tool.serverId === 'server-core'
+        ? await executeMockCoreTool(tool.name, request.input)
+        : {
+            tool: tool.name,
+            serverId: request.serverId,
+            input: request.input,
+            response: {
+              ok: true,
+              message: `${tool.name} executed successfully.`,
+              timestamp: new Date().toISOString(),
+            },
+          }
+
+      return saveExecution({
+        id: request.id,
+        requestId: request.id,
+        kind: 'tool',
+        toolId: tool.id,
+        serverId: tool.serverId,
+        toolName: tool.name,
         input: request.input,
-        response: {
-          ok: true,
-          message: `${tool.name} executed successfully.`,
-          timestamp: new Date().toISOString(),
-        },
-      },
-      startedAt: request.createdAt,
-      finishedAt: new Date().toISOString(),
-      durationMs: Date.now() - started,
-    })
+        request,
+        status: 'success',
+        output,
+        startedAt: request.createdAt,
+        finishedAt: new Date().toISOString(),
+        durationMs: Date.now() - started,
+      })
+    } catch (error) {
+      return failed(error instanceof Error ? error.message : 'Tool execution failed.')
+    }
   },
 
   readResource: async (resourceId: string): Promise<MCPResourceContent> => {
