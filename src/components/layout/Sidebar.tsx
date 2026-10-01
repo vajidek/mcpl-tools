@@ -11,9 +11,9 @@ export function Sidebar() {
   return (
     <aside className="sidebar" aria-label="Main navigation">
       <div className="brand-block">
-        <div className="brand-mark">M</div>
+        <img className="brand-logo" src={`${import.meta.env.BASE_URL}midland-logo.svg`} alt="Midland Contracting Private Limited" />
         <div>
-          <p className="eyebrow">Engineering tools</p>
+          <p className="eyebrow">Engineering tools for everyday work</p>
           <h1>MCPL Tools</h1>
         </div>
       </div>
