@@ -25,6 +25,51 @@ function PipeWeightTool() {
   ]} result={<><strong>{kgPerM.toFixed(2)} kg/m</strong><span>Total: {total.toFixed(2)} kg</span></>} />
 }
 
+function SteelPlateWeightTool() {
+  const [length, setLength] = useState('2000')
+  const [width, setWidth] = useState('1000')
+  const [thickness, setThickness] = useState('10')
+  const [density, setDensity] = useState('7850')
+  const volume = asNumber(length) / 1000 * (asNumber(width) / 1000) * (asNumber(thickness) / 1000)
+  const weight = volume * asNumber(density)
+  return <Calculator title="Steel Plate Weight Calculator" description="Calculate plate weight from dimensions. Density defaults to carbon steel." fields={[
+    ['Length (mm)', length, setLength],
+    ['Width (mm)', width, setWidth],
+    ['Thickness (mm)', thickness, setThickness],
+    ['Density (kg/m³)', density, setDensity],
+  ]} result={<><strong>{weight.toFixed(2)} kg</strong><span>{(weight / 1000).toFixed(3)} ton</span></>} />
+}
+
+function PumpPowerTool() {
+  const [flow, setFlow] = useState('100')
+  const [head, setHead] = useState('60')
+  const [efficiency, setEfficiency] = useState('75')
+  const hydraulic = 9.81 * (asNumber(flow) / 1000) * asNumber(head)
+  const shaft = hydraulic / Math.max(asNumber(efficiency) / 100, 0.01)
+  return <Calculator title="Pump Power Calculator" description="Estimate pump power from flow, total head and overall efficiency." fields={[
+    ['Flow (L/s)', flow, setFlow],
+    ['Total head (m)', head, setHead],
+    ['Efficiency (%)', efficiency, setEfficiency],
+  ]} result={<><strong>{shaft.toFixed(2)} kW</strong><span>Hydraulic power: {hydraulic.toFixed(2)} kW</span></>} />
+}
+
+function PressureHeadTool() {
+  const [pressure, setPressure] = useState('1')
+  const [unit, setUnit] = useState<'bar' | 'MPa'>('bar')
+  const pressureBar = unit === 'bar' ? asNumber(pressure) : asNumber(pressure) * 10
+  const head = pressureBar * 10.19716213
+  return <div className="calculator-card">
+    <p className="eyebrow">Mechanical</p>
+    <h3>Pressure to Head Converter</h3>
+    <p className="tool-description">Convert water pressure to approximate water head.</p>
+    <div className="calculator-grid">
+      <label className="field-group"><span>Pressure</span><input className="text-input" type="number" value={pressure} onChange={(event) => setPressure(event.target.value)} /></label>
+      <label className="field-group"><span>Unit</span><select className="text-input" value={unit} onChange={(event) => setUnit(event.target.value as 'bar' | 'MPa')}><option>bar</option><option>MPa</option></select></label>
+    </div>
+    <div className="calculator-result"><strong>{head.toFixed(2)} mH₂O</strong><span>{(head * 3.28084).toFixed(2)} ft head</span></div>
+  </div>
+}
+
 function ConcreteTool() {
   const [length, setLength] = useState('5')
   const [width, setWidth] = useState('2')
@@ -34,6 +79,18 @@ function ConcreteTool() {
     ['Length (m)', length, setLength],
     ['Width (m)', width, setWidth],
     ['Height / Depth (m)', height, setHeight],
+  ]} result={<><strong>{volume.toFixed(3)} m³</strong><span>{(volume * 35.3147).toFixed(1)} ft³</span></>} />
+}
+
+function ExcavationTool() {
+  const [length, setLength] = useState('10')
+  const [width, setWidth] = useState('2')
+  const [depth, setDepth] = useState('1.5')
+  const volume = asNumber(length) * asNumber(width) * asNumber(depth)
+  return <Calculator title="Excavation Volume Calculator" description="Calculate earthwork volume from length, width and depth." fields={[
+    ['Length (m)', length, setLength],
+    ['Width (m)', width, setWidth],
+    ['Depth (m)', depth, setDepth],
   ]} result={<><strong>{volume.toFixed(3)} m³</strong><span>{(volume * 35.3147).toFixed(1)} ft³</span></>} />
 }
 
@@ -107,11 +164,19 @@ export function UtilityToolPage() {
   const { toolSlug } = useParams()
   const content = toolSlug === 'pipe-weight'
     ? <PipeWeightTool />
-    : toolSlug === 'concrete-volume'
-      ? <ConcreteTool />
-      : toolSlug === 'wastage'
-        ? <WastageTool />
-        : <UnitConverterTool />
+    : toolSlug === 'steel-plate-weight'
+      ? <SteelPlateWeightTool />
+      : toolSlug === 'pump-power'
+        ? <PumpPowerTool />
+        : toolSlug === 'pressure-head'
+          ? <PressureHeadTool />
+          : toolSlug === 'concrete-volume'
+            ? <ConcreteTool />
+            : toolSlug === 'excavation-volume'
+              ? <ExcavationTool />
+              : toolSlug === 'wastage'
+                ? <WastageTool />
+                : <UnitConverterTool />
 
   return (
     <div className="page-stack">
