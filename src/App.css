@@ -1150,3 +1150,56 @@ html[data-theme='light'] .button-ghost {
     background: #fff !important;
   }
 }
+
+.mto-reference-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  border-bottom: 3px solid #9e2b25;
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+}
+.mto-reference-header h1 {
+  margin: 0;
+  color: #111827;
+  font-size: clamp(1.4rem, 3vw, 2rem);
+}
+.mto-reference-header p:last-child {
+  margin: 4px 0 0;
+  color: #64748b;
+}
+.mto-meta-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.mto-remarks-field {
+  grid-column: 1 / -1;
+}
+.mto-description-cell {
+  min-width: 210px;
+}
+.mto-table {
+  min-width: 1050px;
+}
+.mto-table th:first-child {
+  width: 64px;
+}
+@media (max-width: 900px) {
+  .mto-reference-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .mto-meta-grid {
+    grid-template-columns: 1fr;
+  }
+  .mto-remarks-field {
+    grid-column: auto;
+  }
+}
+@media print {
+  .mto-reference-header {
+    border-bottom-color: #9e2b25 !important;
+  }
+}
