@@ -13,6 +13,7 @@ export class UnconfiguredMCPGateway implements MCPGateway {
   readonly supportedTransports: Array<'stdio' | 'http'> = []
 
   async close(): Promise<void> {}
+  async initializeEnabledServers(): Promise<void> {}
 
   async connect(): Promise<MCPServer> { return unavailable() }
   async disconnect(): Promise<MCPServer> { return unavailable() }

@@ -80,6 +80,7 @@ export class ApiController {
         environment: this.environment.environment,
         mcp: {
           configuredServers: this.servers.listServers().length,
+          readyServers: this.servers.listServers().filter((server) => server.connectionStatus === 'ready').length,
           transportConfigured: this.gateway.supportedTransports.length > 0,
           supportedTransports: this.gateway.supportedTransports,
         },

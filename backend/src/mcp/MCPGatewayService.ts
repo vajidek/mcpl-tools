@@ -558,6 +558,16 @@ export class MCPGatewayService implements MCPGateway {
     }
   }
 
+  async initializeEnabledServers(): Promise<void> {
+    const builtin = this.servers.listServers().find((server) => server.id === 'mcpl-core-tools' && server.enabled)
+    if (!builtin) return
+    try {
+      await this.connect(builtin)
+    } catch {
+      // The bundled utility server is optional; the gateway remains available if it cannot start.
+    }
+  }
+
   async close(): Promise<void> {
     await Promise.allSettled([...this.sessions.keys()].map((serverId) => this.disconnect(serverId)))
   }

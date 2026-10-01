@@ -1,4 +1,3 @@
-import { appConfig } from '../../app/config/app.config'
 import type { MCPExecutionRequest, MCPExecutionResult, MCPPrompt, MCPResource, MCPResourceContent, MCPServer, MCPTool } from '../../mcp/types/mcp.types'
 import { apiClient } from '../api/apiClient'
 import { ApiError } from '../api/apiErrors'
@@ -6,6 +5,7 @@ import type { ApiResponse } from '../../types/api'
 import type { LogEntry } from '../logging/logTypes'
 import type { MCPServiceProvider } from './MCPServiceProvider.types'
 import { mockMcpService } from './mockMcpService'
+import { getRuntimeConnectionSettings } from './runtimeConfig'
 
 const encode = (value: string) => encodeURIComponent(value)
 
@@ -62,13 +62,13 @@ const apiProvider: MCPServiceProvider = {
   initialResources: [],
   health: async () => {
     try {
-      const health = await readApi<{ status: 'ok'; mcp: { transportConfigured: boolean; supportedTransports: string[] } }>('/health')
+      const health = await readApi<{ status: 'ok'; mcp: { configuredServers: number; readyServers: number; transportConfigured: boolean; supportedTransports: string[] } }>('/health')
       const transports = health.mcp.supportedTransports.join(', ')
       return {
         status: health.status,
         mode: 'api',
         transportConfigured: health.mcp.transportConfigured,
-        message: health.mcp.transportConfigured ? `Backend API reachable; supported MCP transports: ${transports}.` : 'Backend API reachable; MCP transports are not configured.',
+        message: health.mcp.transportConfigured ? `Backend API reachable; ${health.mcp.readyServers}/${health.mcp.configuredServers} MCP servers ready; transports: ${transports}.` : 'Backend API reachable; MCP transports are not configured.',
       }
     } catch (error) {
       return { status: 'unavailable', mode: 'api', transportConfigured: false, message: error instanceof Error ? error.message : 'Backend API unavailable.' }
@@ -108,4 +108,37 @@ const apiProvider: MCPServiceProvider = {
   resetDemoState: async () => { throw new Error('Local demo reset is not available in API mode.') },
 }
 
-export const mcpServiceProvider: MCPServiceProvider = appConfig.mcpProvider === 'api' ? apiProvider : demoProvider
+const activeProvider = (): MCPServiceProvider => {
+  const runtime = getRuntimeConnectionSettings()
+  return runtime.mode === 'api' && runtime.apiBaseUrl ? apiProvider : demoProvider
+}
+
+export const mcpServiceProvider: MCPServiceProvider = {
+  get mode() { return activeProvider().mode },
+  get initialServers() { return activeProvider().initialServers },
+  get initialTools() { return activeProvider().initialTools },
+  get initialExecutions() { return activeProvider().initialExecutions },
+  get initialPrompts() { return activeProvider().initialPrompts },
+  get initialResources() { return activeProvider().initialResources },
+  health: () => activeProvider().health(),
+  listServers: () => activeProvider().listServers(),
+  getServer: (id) => activeProvider().getServer(id),
+  connectServer: (id) => activeProvider().connectServer(id),
+  disconnectServer: (id) => activeProvider().disconnectServer(id),
+  testServerConnection: (id) => activeProvider().testServerConnection(id),
+  listTools: (serverId) => activeProvider().listTools(serverId),
+  getTool: (id) => activeProvider().getTool(id),
+  listResources: (serverId) => activeProvider().listResources(serverId),
+  getResource: (id) => activeProvider().getResource(id),
+  readResource: (id) => activeProvider().readResource(id),
+  listPrompts: (serverId) => activeProvider().listPrompts(serverId),
+  getPrompt: (id) => activeProvider().getPrompt(id),
+  executeTool: (request) => activeProvider().executeTool(request),
+  executePrompt: (request) => activeProvider().executePrompt(request),
+  listExecutions: () => activeProvider().listExecutions(),
+  getExecution: (id) => activeProvider().getExecution(id),
+  clearExecutions: () => activeProvider().clearExecutions(),
+  listLogs: (level, search, source) => activeProvider().listLogs(level, search, source),
+  clearLogs: () => activeProvider().clearLogs(),
+  resetDemoState: () => activeProvider().resetDemoState(),
+}

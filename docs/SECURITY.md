@@ -1,22 +1,34 @@
-# Security
+# Security baseline
 
-- Do not commit secrets or tokens.
-- Keep credentials out of frontend source.
-- Never log private credentials or tokens.
-- Validate inputs before execution.
-- Use centralized config access through environment helpers.
-- Browser-only React cannot securely store privileged local MCP secrets.
+MCPL Tools separates the browser workspace from backend MCP execution.
 
-## Backend foundation
+## Browser boundary
 
-- The HTTP service binds to loopback (`127.0.0.1`) by default. Production requires explicit `CORS_ORIGINS`.
-- CORS is an exact origin allowlist without credentialed browser requests. Security headers, request timeouts, a per-IP in-memory rate limit, a 256 KiB JSON body limit, and JSON shape/depth/key validation are enabled.
-- API errors return a stable code/message/status envelope; internal exception details and stack traces are not returned.
-- Server configuration rejects unknown fields, embedded URL credentials, URL query parameters, and fragments. Server credentials are never sent in API DTOs. Stdio environment values may only refer to backend process variables with `${VARIABLE}` references.
-- Frontend fetches omit credentials and reject redirects. Do not put backend secrets in `VITE_*` variables.
-- API-mode logs contain operation identifiers, not request payloads. Log message secret patterns are redacted.
-- Runtime repositories are in-memory development implementations. They are not durable, multi-user, or suitable for production.
+The browser does not receive configured MCP server credentials. In API mode, the browser sends only the backend URL and a Bearer API token. The API token is held in session storage rather than persisted as application source.
 
-Real MCP transports use the official SDK: stdio via absolute executable + argument arrays (no shell), and Streamable HTTP via a custom fetch/Undici dispatcher that pins validated DNS addresses. `MCP_ALLOWED_COMMANDS` and `MCP_ALLOWED_HOSTS` are mandatory trust boundaries; allowlisting loopback is intended only for local development. The backend does not permit browser-supplied transport configuration. Use a dedicated server-side secret manager for credentials; process environment references are a development boundary, not a complete production secret-management system.
+## Backend boundary
 
-The SDK child-process transport is closed on disconnect, connection failure, timeout, and backend shutdown. The local integration fixture is development-only.
+Production requires:
+
+- explicit CORS_ORIGINS
+- an API_ACCESS_TOKEN with at least 32 characters
+- HTTPS-only outbound MCP HTTP endpoints
+- explicit MCP HTTP host allowlists
+- explicit absolute stdio command allowlists
+- bounded request bodies, input nesting, array/object sizes, and execution timeouts
+- outbound DNS/IP policy that blocks private and reserved addresses
+- security headers including HSTS when running in production
+
+Never commit secrets, access tokens, MCP credentials, or MCP configuration containing literal secret material.
+
+## Bundled tools
+
+The backend includes a small MCPL Core Tools stdio MCP server with deterministic developer utilities. It uses the backend Node executable and does not require external credentials.
+
+## Free hosting caveat
+
+The included Render blueprint is suitable for evaluation, testing, and hobby deployments. A free instance may sleep after inactivity and its local runtime state is ephemeral. Current execution history and logs are intentionally in-memory; durable operational history requires a persistent datastore and a hosting tier that supports it.
+
+## Operational recommendations
+
+Use a strong unique API token, restrict CORS to the exact browser origins you operate, keep MCP allowlists minimal, and rotate tokens when access changes. Put all third-party credentials in the backend hosting provider secret/environment store.

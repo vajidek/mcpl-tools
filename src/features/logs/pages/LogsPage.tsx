@@ -3,7 +3,7 @@ import { Button } from '../../../components/ui/Button'
 import { Badge } from '../../../components/ui/Badge'
 import { Card } from '../../../components/ui/Card'
 import { mcpServiceProvider } from '../../../services/mcp/MCPServiceProvider'
-import type { LogEntry, LogLevel } from '../../../services/logging/logTypes'
+import type { LogLevel } from '../../../services/logging/logTypes'
 import { useAsync } from '../../../hooks/useAsync'
 
 const levels: Array<'ALL' | LogLevel> = ['ALL', 'DEBUG', 'INFO', 'WARN', 'ERROR']
@@ -15,9 +15,9 @@ export function LogsPage() {
   const [source, setSource] = useState('all')
   const [actionError, setActionError] = useState('')
 
-  const loadLogs = useCallback(() => mcpServiceProvider.listLogs(level, search, source), [level, search, source, refreshKey])
+  const loadLogs = useCallback(() => { void refreshKey; return mcpServiceProvider.listLogs(level, search, source) }, [level, search, source, refreshKey])
   const { data: loadedLogs, loading, error: asyncError } = useAsync(loadLogs)
-  const logs: LogEntry[] = loadedLogs ?? []
+  const logs = useMemo(() => loadedLogs ?? [], [loadedLogs])
   const error = asyncError?.message ?? actionError
 
   const refreshLogs = () => {

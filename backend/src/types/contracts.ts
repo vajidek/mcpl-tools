@@ -24,7 +24,12 @@ export type HealthStatus = {
   status: 'ok'
   service: 'mcpl-tools-api'
   environment: string
-  mcp: { configuredServers: number; transportConfigured: boolean; supportedTransports: Array<'stdio' | 'http'> }
+  mcp: {
+    configuredServers: number
+    readyServers: number
+    transportConfigured: boolean
+    supportedTransports: Array<'stdio' | 'http'>
+  }
   uptimeSeconds: number
 }
 
@@ -37,6 +42,7 @@ export type ExecutionSubmission = MCPExecutionRequest & {
 export type MCPGateway = {
   readonly supportedTransports: Array<'stdio' | 'http'>
   close(): Promise<void>
+  initializeEnabledServers(): Promise<void>
   connect(server: MCPServer): Promise<MCPServer>
   disconnect(serverId: string): Promise<MCPServer>
   testConnection(serverId: string): Promise<{ success: boolean; message: string }>

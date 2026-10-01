@@ -1,59 +1,77 @@
 # mcpl-tools
 
-React + TypeScript + Vite frontend for MCP discovery and execution workflows, with an optional Node HTTP API and official MCP TypeScript SDK gateway. The frontend defaults to isolated mock mode; API mode is opt-in.
+React + TypeScript + Vite frontend for MCP discovery and execution workflows, with an optional Node HTTP API and official MCP TypeScript SDK gateway.
 
-## Run demo mode
+## Included
 
-```powershell
-npm install
-npm run dev
-```
+- Responsive MCP operations workspace
+- Server connection and health controls
+- Tool, resource, and prompt discovery
+- Tool and prompt execution console
+- Execution history and filtered logs
+- Demo provider for local/offline UI use
+- Runtime API connection from GitHub Pages
+- Node MCP gateway for stdio and MCP Streamable HTTP
+- Security controls for origin, input, command, host, DNS/IP, timeout, and request size
+- Bundled MCPL Core Tools utility MCP server
+- Docker image and Render Blueprint for the backend
+- CI for lint, builds, MCP smoke tests, and Docker build
+- GitHub Pages deployment for the frontend
 
-## Run the API foundation
+## Demo
 
-In one terminal, build and start the backend:
+Run npm install, then npm run dev.
+The frontend defaults to Demo mode and makes no external MCP connection.
 
-```powershell
-npm run backend:dev
-```
+## Local real API
 
-In another terminal, start Vite with its `/api` proxy:
+Start the backend with npm run backend:dev. Start Vite in another terminal with npm run dev. Backend configuration lives in backend/.env.
 
-```powershell
-npm run dev
-```
+## Production deployment
 
-Copy the root `.env.example` to `.env.local` and set `VITE_MCP_PROVIDER=api` to select the backend provider. `mock` (or `demo`) keeps using local mock data. Copy `backend/.env.example` to `backend/.env` for backend-only configuration. The backend listens on `127.0.0.1:8787` by default; health is available at `/api/health` through Vite or `/health` directly.
+### Frontend
 
-## Real MCP development test
+The static workspace is deployed through GitHub Pages at https://vajidek.github.io/mcpl-tools/ .
 
-The backend currently supports stdio and MCP Streamable HTTP through the official SDK. Run a complete local protocol test (it starts and cleans up the backend and fixture processes itself):
+### Backend
 
-```powershell
-npm run backend:test-mcp
-```
+A Docker deployment blueprint is included in render.yaml. Create a Render Web Service from this repository and use the generated service URL as the backend API URL.
 
-This verifies initialize/capability negotiation, discovery, tool execution, resource reads, prompt retrieval, timeout/error paths, disconnect, and reconnect against SDK-based local fixtures. The real API provider uses the gateway for configured servers; it does not fall back to mock data after a failure.
+Required production variables are NODE_ENV=production, HOST=0.0.0.0, CORS_ORIGINS=https://vajidek.github.io, API_ACCESS_TOKEN with at least 32 random characters, and MCP_BUILTIN_TOOLS=true.
+
+The blueprint starts with an empty external MCP configuration. The bundled MCPL Core Tools server is enabled by default.
+
+For custom MCP servers, configure MCP_SERVERS_JSON plus matching MCP_ALLOWED_COMMANDS and/or MCP_ALLOWED_HOSTS in the backend host secret settings. Do not put secrets directly into repository files.
+
+### Connect the live frontend
+
+Open the live site, go to Settings → Connection, enter the deployed backend URL and the same API_ACCESS_TOKEN, then choose Save and verify API.
+
+The browser switches from Demo to API mode without rebuilding GitHub Pages.
+
+## Bundled utility MCP tools
+
+The bundled server exposes: uuid_generate, json_format, json_minify, base64_encode, base64_decode, url_encode, url_decode, sha256, text_stats, regex_test, and timestamp_parse.
+
+It also exposes a tool catalog resource and a developer-input review prompt.
+
+## MCP integration
+
+The gateway supports local stdio MCP servers, remote MCP Streamable HTTP servers, initialize and capability negotiation, tool discovery and execution, resource discovery and reads, prompt discovery and retrieval, bounded request timeouts, connection and reconnect handling, and cleanup.
+
+Run npm run backend:test-mcp for the end-to-end local protocol smoke test.
 
 ## Validation
 
-```powershell
-npm run lint
-npm run build
-npm run backend:check
-npm run backend:build
-npm run backend:test-mcp
-```
+- npm run lint
+- npm run build
+- npm run backend:check
+- npm run backend:build
+- npm run backend:test-mcp
+- docker build -t mcpl-tools-api:local .
 
-## Architecture and security
+## Runtime storage
 
-See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md), [docs/MCP.md](docs/MCP.md), [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md), and [docs/SECURITY.md](docs/SECURITY.md). Backend runtime history/log repositories are in-memory only. No database or credential storage is configured.
+Execution history and logs are currently in memory only. Restarting the backend clears them. Durable long-term audit history requires a persistent datastore.
 
-
-## Production website
-
-The application is built as a static web app and uses hash routing so it can be hosted safely on GitHub Pages or another static host. The repository includes CI verification and a GitHub Pages deployment workflow.
-
-For GitHub Pages, enable **Settings → Pages → GitHub Actions** once in the repository. After the default branch receives the deployment workflow, pushes to `main` publish the production build.
-
-The default frontend provider is demo mode. Real MCP connectivity is enabled by setting `VITE_MCP_PROVIDER=api` and configuring the backend environment separately; server credentials remain backend-side.
+See docs/ARCHITECTURE.md, docs/API.md, docs/MCP.md, docs/SECURITY.md, and docs/DEVELOPMENT.md.
