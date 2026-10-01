@@ -14,18 +14,23 @@ const featuredTools = [
     path: ROUTE_PATHS.utilityTool.replace(':toolSlug', 'pipe-weight'),
   },
   {
-    title: 'Concrete Volume Calculator',
-    text: 'Calculate concrete volume from length, width and height.',
+    title: 'Steel Plate Weight',
+    text: 'Get the weight of a steel plate from length, width and thickness.',
+    path: ROUTE_PATHS.utilityTool.replace(':toolSlug', 'steel-plate-weight'),
+  },
+  {
+    title: 'Pump Power',
+    text: 'Estimate pump power from flow, head and efficiency.',
+    path: ROUTE_PATHS.utilityTool.replace(':toolSlug', 'pump-power'),
+  },
+  {
+    title: 'Concrete Volume',
+    text: 'Calculate concrete quantity from dimensions.',
     path: ROUTE_PATHS.utilityTool.replace(':toolSlug', 'concrete-volume'),
   },
   {
-    title: 'Wastage Calculator',
-    text: 'Add a wastage percentage to any material quantity.',
-    path: ROUTE_PATHS.utilityTool.replace(':toolSlug', 'wastage'),
-  },
-  {
     title: 'Unit Converter',
-    text: 'Quickly convert common length, area, volume and weight units.',
+    text: 'Convert common length, area, volume and weight units.',
     path: ROUTE_PATHS.utilityTool.replace(':toolSlug', 'unit-converter'),
   },
 ]
