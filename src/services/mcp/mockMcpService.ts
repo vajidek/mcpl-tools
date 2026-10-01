@@ -1,5 +1,6 @@
 import { mockExecutions, mockLogs } from '../../mocks/execution'
 import { mockPrompts, mockResources, mockServers, mockTools } from '../../mocks/servers'
+import { isMCPServerConnected } from '../../mcp/types/mcp.types'
 import type {
   MCPExecutionRequest,
   MCPExecutionResult,
@@ -335,7 +336,7 @@ export const getServerMetrics = () => {
   const executions = mockMcpService.getExecutionHistory()
 
   return {
-    connectedServers: servers.filter((server) => server.connectionStatus === 'connected').length,
+    connectedServers: servers.filter((server) => isMCPServerConnected(server.connectionStatus)).length,
     totalTools: tools.length,
     totalResources: resources.length,
     totalPrompts: prompts.length,
