@@ -83,7 +83,7 @@ export function ToolsPage() {
                 ))}
               </div>
               <div className="tool-meta">
-                <span>{tool.serverId}</span>
+                <span>Built-in</span>
                 <div className="inline-actions">
                   <Link to={ROUTE_PATHS.toolDetail.replace(':toolId', tool.id)}>Details</Link>
                   <Link to={ROUTE_PATHS.toolExecute.replace(':toolId', tool.id)}>Run</Link>
