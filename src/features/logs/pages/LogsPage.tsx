@@ -1,32 +1,26 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { Button } from '../../../components/ui/Button'
 import { Badge } from '../../../components/ui/Badge'
 import { Card } from '../../../components/ui/Card'
 import { mcpServiceProvider } from '../../../services/mcp/MCPServiceProvider'
 import type { LogEntry, LogLevel } from '../../../services/logging/logTypes'
+import { useAsync } from '../../../hooks/useAsync'
 
 const levels: Array<'ALL' | LogLevel> = ['ALL', 'DEBUG', 'INFO', 'WARN', 'ERROR']
 
 export function LogsPage() {
-  const [logs, setLogs] = useState<LogEntry[]>([])
+  const [refreshKey, setRefreshKey] = useState(0)
   const [level, setLevel] = useState<'ALL' | LogLevel>('ALL')
   const [search, setSearch] = useState('')
   const [source, setSource] = useState('all')
   const [error, setError] = useState('')
 
-  const loadLogs = useCallback(async () => {
-    try {
-      const nextLogs = await mcpServiceProvider.listLogs(level, search, source)
-      setLogs(nextLogs)
-      setError('')
-    } catch (loadError) {
-      setError(loadError instanceof Error ? loadError.message : 'Unable to load logs.')
-    }
-  }, [level, search, source])
+  const loadLogs = useCallback(() => mcpServiceProvider.listLogs(level, search, source), [level, search, source, refreshKey])
+  const { data: loadedLogs, loading, error: asyncError } = useAsync(loadLogs)
+  const logs: LogEntry[] = loadedLogs ?? []
+  const error = asyncError?.message ?? ''
 
-  useEffect(() => {
-    void loadLogs()
-  }, [loadLogs])
+  const refreshLogs = () => setRefreshKey((current) => current + 1)
 
   const sources = useMemo(
     () => ['all', ...new Set(logs.map((entry) => entry.module ?? (mcpServiceProvider.mode === 'demo' ? 'demo seed' : 'backend')))],
@@ -37,8 +31,7 @@ export function LogsPage() {
     if (!window.confirm('Clear all log entries? This cannot be undone.')) return
     try {
       await mcpServiceProvider.clearLogs()
-      setLogs([])
-      setError('')
+      refreshLogs()
     } catch (clearError) {
       setError(clearError instanceof Error ? clearError.message : 'Unable to clear logs.')
     }
@@ -55,7 +48,7 @@ export function LogsPage() {
           <h2>Operations log</h2>
         </div>
         <div className="inline-actions">
-          <Button type="button" variant="secondary" onClick={() => void loadLogs()}>
+          <Button type="button" variant="secondary" onClick={refreshLogs}>
             Refresh
           </Button>
           <Button type="button" variant="secondary" onClick={() => void clearLogs()} disabled={logs.length === 0}>
@@ -83,7 +76,7 @@ export function LogsPage() {
           <h3>{logs.length} log entries</h3>
           <span className="tool-description">{mcpServiceProvider.mode === 'demo' ? 'Local demo log stream' : 'Backend log stream'}</span>
         </div>
-        {logs.length === 0 ? (
+        {loading && logs.length === 0 ? <p role="status">Loading logs…</p> : logs.length === 0 ? (
           <div className="empty-state compact">
             <h2>No log entries</h2>
             <p>No events match the current filters.</p>
