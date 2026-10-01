@@ -19,6 +19,7 @@ export const ROUTE_PATHS = {
   settingsGeneral: '/settings/general',
   settingsSecurity: '/settings/security',
   settingsAppearance: '/settings/appearance',
+  settingsConnection: '/settings/connection',
 } as const
 
 export const STORAGE_KEYS = {
