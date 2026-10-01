@@ -6,6 +6,8 @@ export const ROUTE_PATHS = {
   tools: '/tools',
   toolDetail: '/tools/:toolId',
   toolExecute: '/tools/:toolId/execute',
+  utilityTool: '/tools/utility/:toolSlug',
+  mtoGenerator: '/mto-generator',
   executionConsole: '/execute',
   resources: '/resources',
   resourceDetail: '/resources/:resourceId',
@@ -26,4 +28,5 @@ export const STORAGE_KEYS = {
   theme: 'mcpl-tools.theme',
   appSettings: 'mcpl-tools.settings',
   recentExecutions: 'mcpl-tools.recent-executions.v2',
+  mtoRows: 'mcpl-tools.mto-rows.v1',
 } as const
