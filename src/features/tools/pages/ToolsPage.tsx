@@ -43,14 +43,18 @@ export function ToolsPage() {
 
       {error ? <div className="result-banner result-banner-error" role="alert">{error} <button type="button" onClick={() => void toolStore.refresh()}>Retry</button></div> : null}
       <div className="page-controls split">
-        <select aria-label="Filter tools by category" className="text-input" value={category} onChange={(event) => setCategory(event.target.value)}>
-          <option value="all">All categories</option>
-          {categories.map((item) => <option key={item} value={item}>{item}</option>)}
-        </select>
-        <select aria-label="Filter tools by server" className="text-input" value={serverId} onChange={(event) => setServerId(event.target.value)}>
-          <option value="all">All servers</option>
-          {servers.map((server) => <option key={server.id} value={server.id}>{server.name}</option>)}
-        </select>
+        <label className="field-group"><span className="sr-only">Filter by category</span>
+          <select aria-label="Filter tools by category" className="text-input" value={category} onChange={(event) => setCategory(event.target.value)}>
+            <option value="all">All categories</option>
+            {categories.map((item) => <option key={item} value={item}>{item}</option>)}
+          </select>
+        </label>
+        <label className="field-group"><span className="sr-only">Filter by server</span>
+          <select aria-label="Filter tools by server" className="text-input" value={serverId} onChange={(event) => setServerId(event.target.value)}>
+            <option value="all">All servers</option>
+            {servers.map((server) => <option key={server.id} value={server.id}>{server.name}</option>)}
+          </select>
+        </label>
         <input
           className="text-input"
           type="search"
@@ -83,7 +87,7 @@ export function ToolsPage() {
                 ))}
               </div>
               <div className="tool-meta">
-                <span>{tool.serverId}</span>
+                <span>Built-in</span>
                 <div className="inline-actions">
                   <Link to={ROUTE_PATHS.toolDetail.replace(':toolId', tool.id)}>Details</Link>
                   <Link to={ROUTE_PATHS.toolExecute.replace(':toolId', tool.id)}>Run</Link>

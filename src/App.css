@@ -545,7 +545,7 @@
 
 .page-controls.split {
   display: grid;
-  grid-template-columns: minmax(140px, 160px) 1fr;
+  grid-template-columns: minmax(170px, 0.6fr) minmax(200px, 0.9fr) minmax(260px, 1.5fr);
   margin-bottom: 16px;
 }
 
@@ -845,7 +845,8 @@ html[data-theme='light'] .button-ghost {
 
   .content-grid,
   .insight-grid,
-  .settings-shell {
+  .settings-shell,
+  .page-controls.split {
     grid-template-columns: 1fr;
   }
 }
