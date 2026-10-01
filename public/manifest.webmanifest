@@ -1,15 +1,15 @@
 {
   "name": "MCPL Tools",
   "short_name": "MCPL Tools",
-  "description": "MCP server, tool, resource, prompt, execution, and operations workspace.",
+  "description": "Simple mechanical, piping, estimation and project tools.",
   "start_url": "./#/dashboard",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#020817",
-  "theme_color": "#020817",
+  "background_color": "#eef1f4",
+  "theme_color": "#ffffff",
   "icons": [
     {
-      "src": "./favicon.svg",
+      "src": "./midland-logo.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any maskable"
