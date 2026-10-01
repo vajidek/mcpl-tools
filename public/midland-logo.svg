@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 180" role="img" aria-labelledby="title desc">
+<title>Midland Contracting Private Limited</title>
+<desc>Midland logo</desc>
+<rect width="620" height="180" fill="#fff"/>
+<g fill="none" stroke="#9e2b25" stroke-width="11" stroke-linejoin="round">
+  <path d="M28 154V83c0-14 8-22 17-22 8 0 15 4 23 11l17 15v67"/>
+  <path d="M85 154V47L58 21C49 13 39 14 32 20 25 26 23 33 23 43v111"/>
+  <path d="M85 154V57l34 30v67"/>
+</g>
+<text x="178" y="86" font-family="Arial, Helvetica, sans-serif" font-size="72" font-weight="700" fill="#050505" letter-spacing="-2">midland</text>
+<text x="181" y="125" font-family="Arial, Helvetica, sans-serif" font-size="25" font-style="italic" fill="#222">Contracting Private Limited</text>
+</svg>
