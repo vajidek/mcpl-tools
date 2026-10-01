@@ -13,14 +13,17 @@ export function LogsPage() {
   const [level, setLevel] = useState<'ALL' | LogLevel>('ALL')
   const [search, setSearch] = useState('')
   const [source, setSource] = useState('all')
-  const [error, setError] = useState('')
+  const [actionError, setActionError] = useState('')
 
   const loadLogs = useCallback(() => mcpServiceProvider.listLogs(level, search, source), [level, search, source, refreshKey])
   const { data: loadedLogs, loading, error: asyncError } = useAsync(loadLogs)
   const logs: LogEntry[] = loadedLogs ?? []
-  const error = asyncError?.message ?? ''
+  const error = asyncError?.message ?? actionError
 
-  const refreshLogs = () => setRefreshKey((current) => current + 1)
+  const refreshLogs = () => {
+    setActionError('')
+    setRefreshKey((current) => current + 1)
+  }
 
   const sources = useMemo(
     () => ['all', ...new Set(logs.map((entry) => entry.module ?? (mcpServiceProvider.mode === 'demo' ? 'demo seed' : 'backend')))],
@@ -33,7 +36,7 @@ export function LogsPage() {
       await mcpServiceProvider.clearLogs()
       refreshLogs()
     } catch (clearError) {
-      setError(clearError instanceof Error ? clearError.message : 'Unable to clear logs.')
+      setActionError(clearError instanceof Error ? clearError.message : 'Unable to clear logs.')
     }
   }
 
