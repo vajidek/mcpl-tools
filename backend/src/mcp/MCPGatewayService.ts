@@ -558,6 +558,17 @@ export class MCPGatewayService implements MCPGateway {
     }
   }
 
+  async initializeEnabledServers(): Promise<void> {
+    const enabledServers = this.servers.listServers().filter((server) => server.enabled)
+    await Promise.allSettled(enabledServers.map(async (server) => {
+      try {
+        await this.connect(server)
+      } catch {
+        // A single optional server failure must not prevent the gateway from serving healthy servers.
+      }
+    }))
+  }
+
   async close(): Promise<void> {
     await Promise.allSettled([...this.sessions.keys()].map((serverId) => this.disconnect(serverId)))
   }
