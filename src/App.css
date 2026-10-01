@@ -1203,3 +1203,28 @@ html[data-theme='light'] .button-ghost {
     border-bottom-color: #9e2b25 !important;
   }
 }
+
+.brand-logo {
+  width: 170px;
+  height: auto;
+  display: block;
+  background: #fff;
+  border-radius: 6px;
+}
+.mto-reference-header {
+  align-items: center;
+}
+.mto-brand-logo {
+  width: 180px;
+  height: auto;
+  display: block;
+  background: #fff;
+  border-radius: 4px;
+}
+@media (max-width: 900px) {
+  .brand-logo { width: 150px; }
+  .mto-brand-logo { width: 170px; }
+}
+@media print {
+  .mto-brand-logo { width: 150px !important; }
+}
