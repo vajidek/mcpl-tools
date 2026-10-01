@@ -112,7 +112,7 @@ server.registerTool('regex_test', {
     const expression = new RegExp(pattern, flags)
     const matches = [...text.matchAll(expression)].slice(0, 100).map((match) => ({ match: match[0], index: match.index ?? -1, groups: match.groups ?? {} }))
     const result = { matched: matches.length > 0, count: matches.length, matches }
-    return textResult(result, result)
+    return textResult(result)
   } catch {
     return { content: [{ type: 'text', text: 'Invalid regular expression or flags.' }], isError: true }
   }
@@ -127,7 +127,7 @@ server.registerTool('timestamp_parse', {
   if (!Number.isFinite(milliseconds)) return { content: [{ type: 'text', text: 'Invalid timestamp.' }], isError: true }
   const date = new Date(milliseconds)
   const result = { iso: date.toISOString(), unixSeconds: Math.floor(milliseconds / 1000), unixMilliseconds: milliseconds }
-  return textResult(result, result)
+  return textResult(result)
 })
 
 server.registerResource('core-tools-catalog', 'mcpl://core-tools/catalog', {
