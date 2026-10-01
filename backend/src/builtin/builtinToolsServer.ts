@@ -6,9 +6,8 @@ import { z } from 'zod'
 const MAX_TEXT = 200_000
 const boundedText = (name: string) => z.string().max(MAX_TEXT, name + ' exceeds the maximum size.')
 
-const textResult = (value: unknown, structuredContent?: unknown) => ({
-  content: [{ type: 'text' as const, text: typeof value === 'string' ? value : JSON.stringify(value, null, 2) }],
-  ...(structuredContent === undefined ? {} : { structuredContent }),
+const textResult = (value: unknown) => ({
+  content: [{ type: 'text' as const, text: typeof value === 'string' ? value : (JSON.stringify(value, null, 2) ?? String(value)) }],
 })
 
 const server = new McpServer(
@@ -101,7 +100,7 @@ server.registerTool('text_stats', {
     words: text.trim() ? text.trim().split(/\s+/).length : 0,
     nonWhitespace: [...text].filter((character) => !/\s/u.test(character)).length,
   }
-  return textResult(stats, stats)
+  return textResult(stats)
 })
 
 server.registerTool('regex_test', {
